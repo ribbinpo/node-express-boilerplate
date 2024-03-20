@@ -1,16 +1,16 @@
-const getAll = () => {
+const getAll = async () => {
   return "getAll";
 };
 
-const createOne = (exampleCreated: { name: string; description: string }) => {
+const createOne = async (exampleCreated: { name: string; description: string }) => {
   return exampleCreated;
 };
 
-const updateOne = (exampleUpdated: { name?: string; description?: string }) => {
+const updateOne = async (exampleUpdated: { name?: string; description?: string }) => {
   return exampleUpdated;
 };
 
-const deleteOne = () => {
+const deleteOne = async () => {
   return "deleteOne";
 };
 

@@ -20,3 +20,6 @@ app.get("/", (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`[server]: Server is running on ${port}`);
 });
+
+// For integration testing
+export default app;
