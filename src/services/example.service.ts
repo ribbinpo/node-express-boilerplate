@@ -1,17 +1,19 @@
+import { ExampleModel } from "../models/example.model";
+
 const getAll = async () => {
   return "getAll";
 };
 
-const createOne = async (exampleCreated: { name: string; description: string }) => {
-  return exampleCreated;
+const createOne = async (example: ExampleModel) => {
+  return example;
 };
 
-const updateOne = async (exampleUpdated: { name?: string; description?: string }) => {
-  return exampleUpdated;
+const updateOne = async (example: Partial<ExampleModel>) => {
+  return example;
 };
 
-const deleteOne = async () => {
-  return "deleteOne";
+const deleteOne = async (id: string) => {
+  return id;
 };
 
 export default {

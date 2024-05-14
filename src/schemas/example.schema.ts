@@ -1,16 +1,17 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
 const create = () => {
   return [
-    body("name").trim().notEmpty(),
-    body("description").trim().notEmpty(),
+    body("name").isString().trim().notEmpty(),
+    body("description").isString().notEmpty(),
   ];
 };
 
 const update = () => {
   return [
-    body("name").trim().optional(),
-    body("description").trim().optional(),
+    param("id").isString().notEmpty(),
+    body("name").isString().trim().optional(),
+    body("description").isString().optional(),
   ];
 };
 
