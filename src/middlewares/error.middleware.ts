@@ -1,17 +1,24 @@
 import { Request, Response, NextFunction } from "express";
-import { ResponseErrorMapping } from "../utils/response.util";
+
+import { ErrorHandler } from "../utils/error.util";
 
 export const errorHandler = (
-  err: Error,
-  _: Request,
+  err: Error | ErrorHandler,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  if (err) {
-    console.error(err.stack);
-    res
-      .status(500)
-      .send(ResponseErrorMapping({ status: 500, error: err.message }));
+  if (err instanceof ErrorHandler) {
+    return res.status(err.statusCode).json({
+      status: "Failed",
+      statusCode: err.statusCode,
+      message: err.message,
+    });
+  } else {
+    return res.status(500).json({
+      status: "Failed",
+      statusCode: 500,
+      message: err,
+    });
   }
-  next();
 };

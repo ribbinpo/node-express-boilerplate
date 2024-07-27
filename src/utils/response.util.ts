@@ -1,4 +1,4 @@
-export const ResponseSuccessMapping = <T>({
+export const successHandler = <T>({
   status = 200,
   message,
   data,
@@ -8,14 +8,4 @@ export const ResponseSuccessMapping = <T>({
   data?: T;
 }) => {
   return { status, message, data };
-};
-
-export const ResponseErrorMapping = ({
-  status = 500,
-  error,
-}: {
-  status?: number;
-  error?: string;
-}) => {
-  return { status, error };
 };

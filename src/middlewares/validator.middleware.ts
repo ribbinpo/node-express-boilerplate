@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { validationResult } from "express-validator";
+import { ValidationError, validationResult } from "express-validator";
+import { BadRequestError } from "../utils/error.util";
 
 export const validateSchemaMiddleware = (
   req: Request,
@@ -11,5 +12,5 @@ export const validateSchemaMiddleware = (
     return next();
   }
 
-  res.status(400).send({ errors: result.array() });
+  throw new BadRequestError(result.array());
 };
