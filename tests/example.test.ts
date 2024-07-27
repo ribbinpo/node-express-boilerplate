@@ -25,7 +25,8 @@ describe("Example Service", () => {
   });
 
   it("should be able to delete an example", async () => {
-    const message = await exampleService.deleteOne();
-    expect(message).toBe("deleteOne");
+    const id = '1';
+    const message = await exampleService.deleteOne(id);
+    expect(message).toBe(id);
   });
 });
