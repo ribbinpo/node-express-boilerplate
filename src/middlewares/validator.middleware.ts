@@ -8,9 +8,7 @@ export const validateSchemaMiddleware = (
   next: NextFunction
 ) => {
   const result = validationResult(req);
-  if (result.isEmpty()) {
-    return next();
-  }
+  if (!result.isEmpty()) throw new BadRequestError(result.array());
 
-  throw new BadRequestError(result.array());
+  next();
 };

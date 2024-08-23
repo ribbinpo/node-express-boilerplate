@@ -3,11 +3,13 @@ import { matchedData } from "express-validator";
 
 import exampleService from "../services/example.service";
 import { ExampleModel } from "../models/example.model";
-import { successHandler } from "../utils/response.util";
+import { SuccessHandler } from "../utils/response.util";
 
-const getAll = async (req: Request, res: Response, next: NextFunction) => {
+const getAll = async (_: Request, res: Response, next: NextFunction) => {
   try {
-    res.send(exampleService.getAll());
+    return new SuccessHandler({
+      result: exampleService.getAll(),
+    }).send(res);
   } catch (error) {
     next(error);
   }
@@ -17,13 +19,11 @@ const createOne = async (req: Request, res: Response, next: NextFunction) => {
   const dataReq = matchedData(req) as ExampleModel;
   try {
     const exampleCreated = exampleService.createOne(dataReq);
-    return res.status(201).send(
-      successHandler({
-        status: 201,
-        data: exampleCreated,
-        message: "Example created successfully!",
-      })
-    );
+    return new SuccessHandler({
+      statusCode: 201,
+      result: exampleCreated,
+      message: "Example created successfully!",
+    }).send(res);
   } catch (error) {
     next(error);
   }
@@ -31,17 +31,12 @@ const createOne = async (req: Request, res: Response, next: NextFunction) => {
 
 const updateOne = async (req: Request, res: Response, next: NextFunction) => {
   const dataReq = matchedData(req) as Partial<ExampleModel>;
-
   try {
     const exampleUpdated = exampleService.updateOne(dataReq);
-
-    return res.send(
-      successHandler({
-        status: 200,
-        data: exampleUpdated,
-        message: "Example updated successfully!",
-      })
-    );
+    return new SuccessHandler({
+      result: exampleUpdated,
+      message: "Example updated successfully!",
+    }).send(res);
   } catch (error) {
     next(error);
   }
@@ -51,14 +46,11 @@ const deleteOne = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = matchedData(req) as { id: string };
   try {
     const exampleDeleted = exampleService.deleteOne(id);
-
-    res.send(
-      successHandler({
-        status: 204,
-        data: exampleDeleted,
-        message: "Example deleted successfully!",
-      })
-    );
+    return new SuccessHandler({
+      statusCode: 204,
+      result: exampleDeleted,
+      message: "Example deleted successfully!",
+    }).send(res);
   } catch (error) {
     next(error);
   }
