@@ -4,6 +4,7 @@ import "dotenv/config";
 
 import router from "./routes";
 import { errorHandler } from "./middlewares/error.middleware";
+import Queue from "./queue.consume";
 
 const app = express();
 const port = process.env.PORT;
@@ -17,9 +18,11 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Server is running :)");
 });
 
-app.use(errorHandler)
+app.use(errorHandler);
+
 
 app.listen(port, () => {
+  Queue();
   console.log(`[server]: Server is running on ${port}`);
 });
 

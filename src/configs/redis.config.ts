@@ -1,4 +1,5 @@
 import { createClient } from "redis";
+import IORedis from "ioredis";
 
 export const redisClient = async () => {
   const redis = createClient();
@@ -7,4 +8,10 @@ export const redisClient = async () => {
   });
   await redis.connect();
   return redis;
+};
+
+export const ioRedisClient = () => {
+  return new IORedis({
+    maxRetriesPerRequest: null,
+  });
 };
