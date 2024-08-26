@@ -1,5 +1,5 @@
 import { Router, Response, Request, NextFunction } from "express";
-import { matchedData, param } from "express-validator";
+import { body, matchedData, param } from "express-validator";
 
 import { redisClient } from "../configs/redis.config";
 import { SuccessHandler } from "../utils/response.util";
@@ -78,6 +78,44 @@ router.get(
       return new SuccessHandler({ statusCode: 200, result }).send(res);
     } catch (error) {
       next(error);
+    }
+  }
+);
+
+// update item on cache
+router.put(
+  "/item/:id",
+  [
+    param("id").isString(),
+    body("name").isString(),
+    body("price").isNumeric(),
+    body("quantity").isNumeric(),
+  ],
+  validateSchemaMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id, ...body } = matchedData(req) as {
+      id: string;
+      name: string;
+      price: number;
+      quantity: number;
+    };
+    const redis = await redisClient();
+    try {
+      const itemCacheRepository = new Repository(ItemCacheSchema, redis);
+      await fetchItemSlowly(id);
+      // if operation is update, we need to update cache too
+      if (await redis.exists("item:" + id)) {
+        await itemCacheRepository.save(id, body);
+        await itemCacheRepository.expire(id, 60); // expired in 60 seconds
+      }
+      return new SuccessHandler({
+        statusCode: 200,
+        message: "item is updated",
+      }).send(res);
+    } catch (error) {
+      next(error);
+    } finally {
+      redis.quit();
     }
   }
 );
