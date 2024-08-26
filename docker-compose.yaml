@@ -7,9 +7,9 @@ services:
       - "8001:8001"
     environment:
       REDIS_PASSWORD: 123456
-    volumes:
-      - ./data:/data
+    # volumes:
+    #   - ./data:/data
     restart: always
-volumes:
-  redis_data:
-    driver: local
+# volumes:
+#   redis_data:
+#     driver: local
