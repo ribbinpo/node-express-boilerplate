@@ -23,6 +23,7 @@ class SuccessHandler<T> {
   send = (res: Response) => {
     return res.status(this.statusCode).json({
       status: this.status,
+      statusCode: this.statusCode,
       message: this.memsage,
       result: this.result,
     });
