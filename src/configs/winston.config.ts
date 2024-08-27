@@ -1,4 +1,5 @@
 import { createLogger, format, transports } from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
 
 // const levels = {
 //   error: 0,
@@ -22,6 +23,11 @@ const logger = createLogger({
   transports: [
     new transports.File({ filename: "logs/error.log", level: "error" }),
     new transports.File({ filename: "logs/combined.log" }),
+    new DailyRotateFile({
+      filename: `logs/%DATE%-results.log`,
+      datePattern: "YYYY-MM-DD",
+      level: "error",
+    }),
   ],
 });
 
