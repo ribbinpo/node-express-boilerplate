@@ -9,3 +9,4 @@ dist
 
 # persisted data
 data/
+logs/
