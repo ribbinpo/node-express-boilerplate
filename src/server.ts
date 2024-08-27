@@ -17,7 +17,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Server is running :)");
 });
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running on ${port}`);
