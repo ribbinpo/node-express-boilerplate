@@ -2,6 +2,7 @@ import { createLogger, format, transports } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 
 import { MongoDBTransport } from "./transport/mongo.transport";
+import { PostgresTransport } from "./transport/pg.transport";
 
 // const levels = {
 //   error: 0,
@@ -34,6 +35,10 @@ const logger = createLogger({
       mongoUri: "mongodb://localhost:27017/?directConnection=true",
       level: "error",
     }),
+    // new PostgresTransport({
+    //   connectionString: 'postgres://user:password@localhost:5432/mydb',
+    //   tableName: 'app_logs',
+    // }),
   ],
 });
 
