@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import { ErrorHandler } from "../utils/error.util";
-import Logger from "../configs/winston.config";
+import Logger from "../configs/winston/winston.config";
 
 export const errorHandler = (
   err: Error | ErrorHandler,

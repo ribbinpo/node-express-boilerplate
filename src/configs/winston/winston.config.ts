@@ -1,6 +1,8 @@
 import { createLogger, format, transports } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 
+import { MongoDBTransport } from "./transport/mongo.transport";
+
 // const levels = {
 //   error: 0,
 //   warn: 1,
@@ -26,6 +28,10 @@ const logger = createLogger({
     new DailyRotateFile({
       filename: `logs/%DATE%-results.log`,
       datePattern: "YYYY-MM-DD",
+      level: "error",
+    }),
+    new MongoDBTransport({
+      mongoUri: "mongodb://localhost:27017/?directConnection=true",
       level: "error",
     }),
   ],
