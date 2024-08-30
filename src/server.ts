@@ -1,8 +1,11 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 import router from "./routes";
+import socketConnection from "./sockets";
 import { errorHandler } from "./middlewares/error.middleware";
 
 const app = express();
@@ -17,9 +20,30 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Server is running :)");
 });
 
-app.use(errorHandler)
+app.use(errorHandler);
 
-app.listen(port, () => {
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+  },
+  transports: ["websocket"],
+}).of("/room");
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socketConnection(socket);
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
+
+io.use((socket, next) => {
+  const auth = socket.handshake.headers.authorization;
+  // check auth
+  next();
+});
+
+httpServer.listen(port, () => {
   console.log(`[server]: Server is running on ${port}`);
 });
 
