@@ -29,18 +29,19 @@ const io = new Server(httpServer, {
   },
   transports: ["websocket"],
 }).of("/room");
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  socketConnection(socket);
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
-  });
-});
 
 io.use((socket, next) => {
   const auth = socket.handshake.headers.authorization;
   // check auth
   next();
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socketConnection(io, socket);
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
 });
 
 httpServer.listen(port, () => {
