@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 
 import router from "./routes";
 import socketConnection from "./sockets";
+import roomsSocket from "./sockets/rooms.socket";
 import { errorHandler } from "./middlewares/error.middleware";
 
 const app = express();
@@ -28,7 +29,7 @@ const io = new Server(httpServer, {
     origin: "*",
   },
   transports: ["websocket"],
-}).of("/room");
+});
 
 io.use((socket, next) => {
   const auth = socket.handshake.headers.authorization;
@@ -36,11 +37,28 @@ io.use((socket, next) => {
   next();
 });
 
-io.on("connection", (socket) => {
+const baseIO = io.of("/");
+const roomIO = io.of("/rooms");
+
+baseIO.on("connection", (socket) => {
   console.log("a user connected");
-  socketConnection(io, socket);
+  socketConnection(baseIO, socket);
   socket.on("disconnect", () => {
     console.log("user disconnected");
+  });
+});
+
+roomIO.on("connection", (socket) => {
+  const roomId = socket.handshake.query.roomId as string;
+  const user = socket.handshake.query.user as string;
+  const rooms = ["room1"];
+  console.log(`${user} connected to room ${rooms[+roomId]}`);
+  roomsSocket.joinRoom(socket, rooms[+roomId]);
+  socket.on("chat", (message) => {
+    roomsSocket.sendMessage(socket, rooms[+roomId], user, message);
+  });
+  socket.on("disconnect", () => {
+    console.log("user disconnected from rooms");
   });
 });
 
