@@ -7,5 +7,6 @@ node_modules
 # Dist
 dist
 
-# Persisted data
+# persisted data
 data/
+logs/
