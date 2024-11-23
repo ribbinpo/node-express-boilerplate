@@ -1,16 +1,22 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
 
-import { ErrorHandler } from "../utils/error.util";
+import { ErrorHandler } from "../utils/response/error.util";
 
-export const errorHandler = (
+export const errorHandler: ErrorRequestHandler = (
   err: Error | ErrorHandler,
-  _: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
   if (err instanceof ErrorHandler) {
-    return err.send(res);
+    res.status(err.statusCode).json({
+      status: "Error",
+      statusCode: err.statusCode,
+      message: err.message,
+    });
   } else {
-    return new ErrorHandler(500, err.toString()).send(res);
+    res
+      .status(500)
+      .json({ status: "Error", statusCode: 500, message: err.message });
   }
 };
