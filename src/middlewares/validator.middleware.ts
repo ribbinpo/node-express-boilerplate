@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { ValidationError, validationResult } from "express-validator";
-import { BadRequestError } from "../utils/error.util";
+import { validationResult } from "express-validator";
+import { BadRequestError } from "../utils/response/error.util";
 
 export const validateSchemaMiddleware = (
   req: Request,

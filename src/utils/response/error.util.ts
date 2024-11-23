@@ -2,17 +2,16 @@ import { Response } from "express";
 
 class ErrorHandler extends Error {
   status: string;
-
-  constructor(public statusCode: number, public message: string | any) {
+  constructor(public statusCode: number, public message: string) {
     super();
-    this.status = "error";
+    this.status = "Error";
     this.statusCode = statusCode;
     this.message = message;
   }
 
-  send = (res: Response) => {
-    return res.status(this.statusCode).json({
-      status: "error",
+  handle = (res: Response) => {
+    res.status(this.statusCode).json({
+      status: "Error",
       statusCode: this.statusCode,
       message: this.message,
     });
@@ -43,10 +42,24 @@ class NotFoundError extends ErrorHandler {
   }
 }
 
+class ConflictError extends ErrorHandler {
+  constructor(message = "Conflict") {
+    super(409, message);
+  }
+}
+
+class ServiceUnavailableError extends ErrorHandler {
+  constructor(message = "Service Unavailable") {
+    super(503, message);
+  }
+}
+
 export {
   ErrorHandler,
   BadRequestError,
   UnauthorizedError,
   ForbiddenError,
   NotFoundError,
+  ConflictError,
+  ServiceUnavailableError,
 };
